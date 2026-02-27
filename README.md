@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## DeltaE Vision: Seeing Color Through a Human Lens
 
-## Getting Started
+I built this because most digital color tools are surprisingly blind. Standard RGB math treats color like a simple 3D grid, but human eyes don't. We perceive changes in blue differently than we do in yellow, and shadows often mess up simple hex-code matching.
 
-First, run the development server:
+DeltaE Vision is a high-performance image analyzer that uses CIEDE2000, CIEDE94, CIEDE76 (Delta E) and K-Means clustering to bridge the gap between raw pixel data and human perception.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Live Demo
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+https://color-analyzer-pi.vercel.app
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## The Problem & The Solution
 
-## Learn More
+When you try to find the dominant colors in an image, a computer might give you a bunch of slightly different shades of gray from a shadow. By implementing K-Means Clustering, this app intelligently groups those pixels into meaningful palettes.
 
-To learn more about Next.js, take a look at the following resources:
+To make those palettes accurate, I used Delta E formulas. Instead of just checking if the numbers are close, the app converts colors into the LAB color space to measure distance based on how the human eye actually functions.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Technical Highlights
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Perceptual Math: Supports CIE76, CIE94, and CIEDE2000 formulas.
+- Smart Clustering: Custom K-Means implementation to find the true soul of an image palette.
+- High-DPI Precision: I used a custom Canvas overlay that scales with devicePixelRatio—no more blurry pixels on Retina displays.
+- Performance First: The analysis is debounced and uses pixel sampling to keep the UI smooth (60fps), even with large uploads.
+- Built With: Next.js 14, TypeScript, Tailwind CSS, and my custom @a.r.i_eze/color-matcher package.
 
-## Deploy on Vercel
+## How it Works
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Upload: Drop any image into the analyzer.
+- Process: The app samples the image and runs the pixels through the selected Delta E formula.
+- Analyze: It maps every pixel to the nearest neighbor in a curated professional palette.
+- Export: Get your results as a clean, structured .json file for use in design systems or brand audits.
