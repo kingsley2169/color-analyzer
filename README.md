@@ -1,31 +1,69 @@
-## DeltaE Vision: Seeing Color Through a Human Lens
+# Image Color Analyzer
 
-I built this because most digital color tools are surprisingly blind. Standard RGB math treats color like a simple 3D grid, but human eyes don't. We perceive changes in blue differently than we do in yellow, and shadows often mess up simple hex-code matching.
+A Next.js app for analyzing the perceptual color makeup of an uploaded image.
 
-DeltaE Vision is a high-performance image analyzer that uses CIEDE2000, CIEDE94, CIEDE76 (Delta E) and K-Means clustering to bridge the gap between raw pixel data and human perception.
+This project is powered by [`@a.r.i_eze/color-matcher`](https://www.npmjs.com/package/@a.r.i_eze/color-matcher), my color matching package for:
 
-## Live Demo
+- RGB to Lab conversion
+- Delta E color comparison
+- nearest named color matching
+- palette-based perceptual color workflows
 
-https://color-analyzer-pi.vercel.app
+## Features
 
+- Upload an image and analyze it directly in the browser
+- Match sampled pixels against named colors using `CIE76`, `CIE94`, and `CIE2000`
+- View color distribution and dominant swatches
+- Inspect points on the image to reveal the nearest named color
+- Generate harmony suggestions from dominant colors
+- Copy summaries, JSON, dominant swatches, and harmony suggestions
+- Export analysis results as JSON or CSV
+- Run image analysis in a worker to keep the UI responsive
 
-## The Problem & The Solution
+## Use Cases
 
-When you try to find the dominant colors in an image, a computer might give you a bunch of slightly different shades of gray from a shadow. By implementing K-Means Clustering, this app intelligently groups those pixels into meaningful palettes.
+- Designers who want to extract dominant colors and build matching palettes from references
+- Brand and marketing teams checking whether uploaded visuals align with a target color language
+- Developers testing or demonstrating palette-based color matching workflows
+- Artists and illustrators exploring harmony suggestions from an existing image
+- Anyone who wants named-color analysis instead of only raw hex extraction
 
-To make those palettes accurate, I used Delta E formulas. Instead of just checking if the numbers are close, the app converts colors into the LAB color space to measure distance based on how the human eye actually functions.
+## Color Matcher Module
 
-## Technical Highlights
+This app uses [`@a.r.i_eze/color-matcher`](https://www.npmjs.com/package/@a.r.i_eze/color-matcher) as its core color engine.
 
-- Perceptual Math: Supports CIE76, CIE94, and CIEDE2000 formulas.
-- Smart Clustering: Custom K-Means implementation to find the true soul of an image palette.
-- High-DPI Precision: I used a custom Canvas overlay that scales with devicePixelRatio—no more blurry pixels on Retina displays.
-- Performance First: The analysis is debounced and uses pixel sampling to keep the UI smooth (60fps), even with large uploads.
-- Built With: Next.js 14, TypeScript, Tailwind CSS, and my custom @a.r.i_eze/color-matcher package.
+The package is used here to:
 
-## How it Works
+- convert sampled RGB values into Lab color space
+- compare colors with Delta E formulas
+- map generated and sampled colors to the nearest named palette entries
 
-- Upload: Drop any image into the analyzer.
-- Process: The app samples the image and runs the pixels through the selected Delta E formula.
-- Analyze: It maps every pixel to the nearest neighbor in a curated professional palette.
-- Export: Get your results as a clean, structured .json file for use in design systems or brand audits.
+## Tech Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Playwright for end-to-end testing
+
+## Local Development
+
+```bash
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000`.
+
+## Scripts
+
+```bash
+npm run dev
+npm run lint
+npm run build
+```
+
+## Notes
+
+- Analysis currently runs on the client, with worker-based processing for the heavier image analysis path.
+- Client-side runtime errors and worker failures are reported to `/api/monitoring` for lightweight structured logging.
