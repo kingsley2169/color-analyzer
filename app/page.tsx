@@ -554,7 +554,7 @@ export default function ColorAnalyzer() {
                   swatches.
                 </p>
                 <p className="text-xs uppercase tracking-[0.18em] text-neutral-500">
-                  Powered by <span className="text-cyan-200">@a.r.i_eze/color-matcher</span>
+                  Powered by <a href="https://www.npmjs.com/package/@a.r.i_eze/color-matcher" target="_blank" rel="noopener noreferrer" className="text-cyan-200">@a.r.i_eze/color-matcher</a>
                 </p>
               </div>
             </header>
